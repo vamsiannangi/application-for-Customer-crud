@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Customer List</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+<a th:href="@{/addCustomer}"><button>Add Customer</button></a>
+<a th:href="@{/logout}"><button>Logout</button></a>
+
+<div>
+    <form th:action="@{/customers}" method="get">
+        <select name="sort">
+            <option value="uuid">Id</option>
+        </select>
+        <button type="submit">Sort</button>
+    </form>
+
+    <form th:action="@{/customers}" method="get">
+        <label for="searchTerm">Search:</label>
+        <input type="text" id="searchTerm" name="search" th:value="${searchParam}">
+        <input type="hidden" name="sort" th:value="${sortParam}">
+        <button type="submit">Search</button>
+    </form>
+    <form method="get" action="/customersApi">
+        <button type="submit">Sync Customers</button>
+    </form>
+    <h1>Customer List</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>S.No</th>
+            <th>UUID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Street</th>
+            <th>Address</th>
+          <th>City</th>
+           <th>State</th>
+               <th>Email</th>
+            <th>Phone</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="customer, iterStat  : ${customerPage}">
+            <td th:text="${iterStat.count + customerPage.number * customerPage.size}"></td>
+            <td th:text="${customer.uuid}"></td>
+            <td th:text="${customer.first_name}"></td>
+            <td th:text="${customer.last_name}"></td>
+            <td th:text="${customer.street}"></td>
+            <td th:text="${customer.address}"></td>
+            <td th:text="${customer.city}"></td>
+            <td th:text="${customer.state}"></td>
+            <td th:text="${customer.email}"></td>
+            <td th:text="${customer.phone}"></td>
+            <td>
+                <a th:href="@{'/update-customer/' + ${customer.uuid}}" th:object="${customer}" th:with="customerObject=${customer}"><button>Edit</button></a>
+                <form th:action="@{'/delete-customer/' + ${customer.uuid}}" method="post">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <div class="pagination">
+    <span th:if="${customerPage != null and customerPage.totalPages > 1}">
+        <span th:if="${customerPage.number > 0}">
+            <a th:href="@{/customers(page=0, size=${customerPage.size}, search=${searchParam}, sort=${sortParam})}">First</a>
+            <a th:href="@{/customers(page=${customerPage.number - 1}, size=${customerPage.size}, search=${searchParam}, sort=${sortParam})}">Previous</a>
+        </span>
+        <span th:if="${customerPage.number < customerPage.totalPages - 1}">
+            <a th:href="@{/customers(page=${customerPage.number + 1}, size=${customerPage.size}, search=${searchParam}, sort=${sortParam})}">Next</a>
+            <a th:href="@{/customers(page=${customerPage.totalPages - 1}, size=${customerPage.size}, search=${searchParam}, sort=${sortParam})}">Last</a>
+        </span>
+    </span>
+    </div>
+</div>
+</body>
+</html>

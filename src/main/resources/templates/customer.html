@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Customer Details</title>
+</head>
+<body>
+
+<h1>Customer Details</h1>
+
+<div th:if="${customer}">
+    <p>ID: <span th:text="${customer.uuid}"></span></p>
+    <p>First Name: <span th:text="${customer.first_name}"></span></p>
+    <p>Last Name: <span th:text="${customer.last_name}"></span></p>
+    <p>Street: <span th:text="${customer.street}"></span></p>
+    <p>Address: <span th:text="${customer.address}"></span></p>
+    <p>City: <span th:text="${customer.city}"></span></p>
+    <p>State: <span th:text="${customer.state}"></span></p>
+    <p>Email: <span th:text="${customer.email}"></span></p>
+    <p>Phone: <span th:text="${customer.phone}"></span></p></div>
+
+<a th:href="@{/customers}"><button>Back to Customer List</button></a>
+
+</body>
+</html>
